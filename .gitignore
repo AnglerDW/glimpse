@@ -1,0 +1,12 @@
+build/
+Glimpse.xcodeproj/
+App/Info.plist
+Core/.build/
+.superpowers/
+.DS_Store
+dist/
+xcuserdata/
+*.xcuserstate
+.swiftpm/
+DerivedData/
+*.dSYM

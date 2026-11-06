@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs><clipPath id="winClip"><rect x="318" y="356" width="388" height="312" rx="46"/></clipPath></defs>
+  <rect x="318" y="356" width="388" height="312" rx="46" fill="#FFFFFF"/>
+  <g clip-path="url(#winClip)">
+    <rect x="318" y="356" width="388" height="76" fill="#F4F8FF"/>
+    <rect x="318" y="430" width="388" height="3" fill="#DCE6F5"/>
+  </g>
+  <circle cx="362" cy="394" r="12.5" fill="#FF5F57"/><circle cx="400" cy="394" r="12.5" fill="#FEBC2E"/><circle cx="438" cy="394" r="12.5" fill="#28C840"/>
+  <g fill="#3A62B8" opacity=".55">
+    <rect x="354" y="472" width="200" height="24" rx="12"/>
+    <rect x="354" y="520" width="300" height="24" rx="12" opacity=".7"/>
+    <rect x="354" y="568" width="240" height="24" rx="12" opacity=".7"/>
+    <rect x="354" y="616" width="150" height="24" rx="12" opacity=".7"/>
+  </g>
+</svg>

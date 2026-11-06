@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="tileBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B4DCFF"/><stop offset=".55" stop-color="#5E97F2"/><stop offset="1" stop-color="#3466DE"/></linearGradient>
+    <radialGradient id="sheen" cx=".32" cy=".06" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".34"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="vign" cx=".85" cy="1" r=".8"><stop offset="0" stop-color="#1B3A9C" stop-opacity=".30"/><stop offset="1" stop-color="#1B3A9C" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#tileBlue)"/>
+  <rect width="1024" height="1024" fill="url(#vign)"/>
+  <rect width="1024" height="1024" fill="url(#sheen)"/>
+</svg>
