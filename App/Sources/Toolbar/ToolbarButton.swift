@@ -89,12 +89,16 @@ final class ToolbarButton: NSButton {
     private static let letterA: NSImage = {
         let side: CGFloat = 18
         let image = NSImage(size: CGSize(width: side, height: side), flipped: false) { rect in
+            guard let context = NSGraphicsContext.current?.cgContext else { return false }
             let font = NSFont.systemFont(ofSize: 14.5, weight: .medium)
-            let glyph = NSAttributedString(string: "A", attributes: [.font: font, .foregroundColor: NSColor.black])
-            let size = glyph.size()
-            // Optical centre: cap height sits above the baseline, so centre the cap, not the line box.
-            let y = (rect.height - font.capHeight) / 2 - font.descender - (font.ascender - font.capHeight)
-            glyph.draw(at: CGPoint(x: (rect.width - size.width) / 2, y: y))
+            let line = CTLineCreateWithAttributedString(
+                NSAttributedString(string: "A", attributes: [.font: font, .foregroundColor: NSColor.black]))
+            // Centre the ink, not the line box: the glyph's path bounds (relative to the baseline origin) say
+            // exactly where the strokes are, so the A sits in the middle of the button like the symbols do.
+            let ink = CTLineGetBoundsWithOptions(line, .useGlyphPathBounds)
+            context.textPosition = CGPoint(x: (rect.width - ink.width) / 2 - ink.minX,
+                                           y: (rect.height - ink.height) / 2 - ink.minY)
+            CTLineDraw(line, context)
             return true
         }
         image.isTemplate = true
