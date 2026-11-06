@@ -1,24 +1,35 @@
 {
   "_readme": [
-      "Single source for every user-visible string. scripts/i18n/generate_xcstrings.py turns it into the three",
-      "String Catalogs (App/Resources/Localizable.xcstrings, App/Resources/InfoPlist.xcstrings,",
-      "Core/Sources/GlimpseCore/Resources/Localizable.xcstrings). Edit this file, then run the script;",
-      "never edit the .xcstrings by hand. The script also checks that the keys used by String(localized:) in the",
-      "code and the keys here are the same set, with the same placeholder types.",
-      "The key is the zh-Hans source text as written in the code; an entry carries an explicit \"zh-Hans\" value",
-      "when the key is not the source text (Info.plist keys, and the few `String(localized: \"id\", defaultValue:)`",
-      "entries whose source text would otherwise collide, e.g. the 保存 section header vs the 保存 button).",
-      "`placeholders` declares the format specifiers in source order (%@ String, %lld Int, %d Int32/OSStatus);",
-      "every language must contain exactly those, in that order.",
-      "Conventions: zh-Hans uses Apple's 拷贝 (not 复制) and App (not 程序). French uses U+00A0 inside « » and before",
-      "the colon, U+202F before ; ! ?. Apple's Russian writes е, never ё. Shortcut symbols ⌘⇧⌥⌃ are never translated.",
-      "Sources checked on macOS 26: accent colour names from /System/Library/Frameworks/AppKit.framework/Resources/",
-      "AccentColorNames.loctable (de Lila / Rosa, ko Graphite 흑색, ru Лиловый); the Screen Recording prompt fragment",
-      "(录制屏幕和系统音频) from /System/Library/Frameworks/ReplayKit.framework/Resources/Localizable.loctable",
-      "SCREENCAPTUREKIT_USER_ALERT_BODY; 'Appearance' is Aspecto in Apple's es-ES System Settings."
+    "Single source for every user-visible string. scripts/i18n/generate_xcstrings.py turns it into the three",
+    "String Catalogs (App/Resources/Localizable.xcstrings, App/Resources/InfoPlist.xcstrings,",
+    "Core/Sources/GlimpseCore/Resources/Localizable.xcstrings). Edit this file, then run the script;",
+    "never edit the .xcstrings by hand. The script also checks that the keys used by String(localized:) in the",
+    "code and the keys here are the same set, with the same placeholder types.",
+    "The key is the zh-Hans source text as written in the code; an entry carries an explicit \"zh-Hans\" value",
+    "when the key is not the source text (Info.plist keys, and the few `String(localized: \"id\", defaultValue:)`",
+    "entries whose source text would otherwise collide, e.g. the 保存 section header vs the 保存 button).",
+    "`placeholders` declares the format specifiers in source order (%@ String, %lld Int, %d Int32/OSStatus);",
+    "every language must contain exactly those, in that order.",
+    "Conventions: zh-Hans uses Apple's 拷贝 (not 复制) and App (not 程序). French uses U+00A0 inside « » and before",
+    "the colon, U+202F before ; ! ?. Apple's Russian writes е, never ё. Shortcut symbols ⌘⇧⌥⌃ are never translated.",
+    "Sources checked on macOS 26: accent colour names from /System/Library/Frameworks/AppKit.framework/Resources/",
+    "AccentColorNames.loctable (de Lila / Rosa, ko Graphite 흑색, ru Лиловый); the Screen Recording prompt fragment",
+    "(录制屏幕和系统音频) from /System/Library/Frameworks/ReplayKit.framework/Resources/Localizable.loctable",
+    "SCREENCAPTUREKIT_USER_ALERT_BODY; 'Appearance' is Aspecto in Apple's es-ES System Settings."
   ],
   "sourceLanguage": "zh-Hans",
-  "languages": ["en", "zh-Hant", "ja", "ko", "de", "fr", "es", "pt-BR", "ru", "it"],
+  "languages": [
+    "en",
+    "zh-Hant",
+    "ja",
+    "ko",
+    "de",
+    "fr",
+    "es",
+    "pt-BR",
+    "ru",
+    "it"
+  ],
   "catalogs": {
     "app": {
       "output": "App/Resources/Localizable.xcstrings",
@@ -264,6 +275,20 @@
           "it": "Apri impostazioni Elementi login"
         },
         {
+          "key": "打开系统设置…",
+          "comment": "Onboarding: secondary button, opens System Settings → Screen Recording",
+          "en": "Open System Settings…",
+          "zh-Hant": "打開系統設定…",
+          "ja": "システム設定を開く…",
+          "ko": "시스템 설정 열기…",
+          "de": "Systemeinstellungen öffnen …",
+          "fr": "Ouvrir les Réglages Système…",
+          "es": "Abrir Ajustes del Sistema…",
+          "pt-BR": "Abrir Ajustes do Sistema…",
+          "ru": "Открыть Системные настройки…",
+          "it": "Apri Impostazioni di Sistema…"
+        },
+        {
           "key": "关于",
           "comment": "Settings section header",
           "en": "About",
@@ -280,7 +305,10 @@
         {
           "key": "版本 %@（Build %@）",
           "comment": "About: version line; %@ are CFBundleShortVersionString and CFBundleVersion",
-          "placeholders": ["%@", "%@"],
+          "placeholders": [
+            "%@",
+            "%@"
+          ],
           "en": "Version %@ (Build %@)",
           "zh-Hant": "版本 %@（Build %@）",
           "ja": "バージョン %@（Build %@）",
@@ -323,7 +351,9 @@
         {
           "key": "「%@」没有注册成功，现在不可用，请换一个",
           "comment": "Shortcut error at launch; %@ is the shortcut",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "“%@” could not be registered and is not working. Choose a different shortcut.",
           "zh-Hant": "「%@」沒有註冊成功，目前無法使用，請換一個",
           "ja": "「%@」を登録できなかったため、現在は使用できません。別のショートカットを設定してください",
@@ -338,7 +368,9 @@
         {
           "key": "「%@」已被其他 App 占用，请换一个",
           "comment": "Shortcut error; %@ is the shortcut",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "“%@” is already used by another app. Choose a different shortcut.",
           "zh-Hant": "「%@」已被其他程式佔用，請換一個",
           "ja": "「%@」はほかのアプリで使用されています。別のショートカットを設定してください",
@@ -353,7 +385,10 @@
         {
           "key": "「%@」注册失败（%d），请换一个",
           "comment": "Shortcut error; %@ is the shortcut, %d the OSStatus",
-          "placeholders": ["%@", "%d"],
+          "placeholders": [
+            "%@",
+            "%d"
+          ],
           "en": "“%@” could not be registered (%d). Choose a different shortcut.",
           "zh-Hant": "「%@」註冊失敗（%d），請換一個",
           "ja": "「%@」を登録できませんでした（%d）。別のショートカットを設定してください",
@@ -438,7 +473,9 @@
         {
           "key": "快捷键 %@",
           "comment": "Accessibility: shortcut recorder; %@ is the shortcut",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "Shortcut %@",
           "zh-Hant": "快速鍵 %@",
           "ja": "ショートカット %@",
@@ -565,7 +602,9 @@
         {
           "key": "关闭所有贴图 (%lld)",
           "comment": "Menu item; %lld is the number of pins",
-          "placeholders": ["%lld"],
+          "placeholders": [
+            "%lld"
+          ],
           "en": "Close All Pins (%lld)",
           "zh-Hant": "關閉所有釘選圖片 (%lld)",
           "ja": "ピン留めをすべて閉じる（%lld）",
@@ -818,7 +857,10 @@
         {
           "key": "%@（%@）",
           "comment": "Toolbar tooltip: name and key",
-          "placeholders": ["%@", "%@"],
+          "placeholders": [
+            "%@",
+            "%@"
+          ],
           "en": "%@ (%@)",
           "zh-Hant": "%@（%@）",
           "ja": "%@（%@）",
@@ -1099,7 +1141,9 @@
         {
           "key": "开启失败：%@",
           "comment": "Launch at login error; %@ is the system's reason",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "Couldn’t turn on: %@",
           "zh-Hant": "開啟失敗：%@",
           "ja": "オンにできませんでした：%@",
@@ -1184,7 +1228,9 @@
         {
           "key": "截图快捷键是 %@。按了没反应时，可能被微信、QQ 等应用的截图快捷键占用，请在那边改掉，或在 Glimpse 的「设置」里换一个。",
           "comment": "Onboarding: shortcut hint; %@ is the shortcut",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "The screenshot shortcut is %@. If it does nothing, another app such as WeChat or QQ may be using it for its own screenshots. Change it there, or pick a different one in Glimpse’s Settings.",
           "zh-Hant": "截圖快速鍵是 %@。按了沒反應時，可能被微信、QQ 等 App 的截圖快速鍵佔用，請在那邊改掉，或在 Glimpse 的「設定」裡換一個。",
           "ja": "スクリーンショットのショートカットは %@ です。押しても反応しない場合は、WeChat や QQ などのスクリーンショットのショートカットと重複している可能性があります。そちらを変更するか、Glimpse の「設定」で別のキーを設定してください。",
@@ -1288,7 +1334,9 @@
         {
           "key": "已保存到「%@」",
           "comment": "HUD after saving; the folder's name",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "Saved to “%@”",
           "zh-Hant": "已儲存到「%@」",
           "ja": "「%@」に保存しました",
@@ -1317,7 +1365,9 @@
         {
           "key": "已拷贝颜色 %@",
           "comment": "HUD after copying a colour value (hex or RGB)",
-          "placeholders": ["%@"],
+          "placeholders": [
+            "%@"
+          ],
           "en": "Copied color %@",
           "zh-Hant": "已拷貝顏色 %@",
           "ja": "カラー %@ をコピーしました",

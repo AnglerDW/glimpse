@@ -16,20 +16,23 @@ struct PermissionFlowTests {
 
     @Test func backFromSystemSettingsWithoutTheGrantOffersARestart() {
         var flow = PermissionFlow()
-        flow.didRequest(openedSystemSettings: true)
+        flow.didOpenSystemSettings()
+        #expect(flow.step == .restartHint)
         flow.appDidBecomeActive(granted: false)
         #expect(flow.step == .needsRestart)
         flow.poll(granted: false) // the poll keeps the restart button
         #expect(flow.step == .needsRestart)
     }
 
-    @Test func theFirstSystemPromptOnlyGetsTheQuietHint() {
+    @Test func theSystemPromptOnlyGetsTheQuietHint() {
         var flow = PermissionFlow()
-        flow.didRequest(openedSystemSettings: false) // only the system's prompt appeared
+        flow.didRequest() // the system's prompt appeared, or nothing did
         #expect(flow.step == .restartHint)
         flow.appDidBecomeActive(granted: false) // declined, or opened System Settings from the prompt
         #expect(flow.step == .restartHint)
-        flow.didRequest(openedSystemSettings: true) // the second click opens System Settings
+        flow.didRequest() // clicking again changes nothing
+        #expect(flow.step == .restartHint)
+        flow.didOpenSystemSettings() // the window's own 「打开系统设置…」 is what makes "back" meaningful
         flow.appDidBecomeActive(granted: false)
         #expect(flow.step == .needsRestart)
     }
@@ -42,7 +45,7 @@ struct PermissionFlowTests {
 
     @Test func backFromSystemSettingsWithTheGrantCloses() {
         var flow = PermissionFlow()
-        flow.didRequest(openedSystemSettings: true)
+        flow.didOpenSystemSettings()
         flow.appDidBecomeActive(granted: true)
         #expect(flow.step == .granted)
     }
@@ -60,10 +63,12 @@ struct PermissionFlowTests {
 
     @Test func aRefusedCaptureReplacesTheQuietHint() {
         var flow = PermissionFlow()
-        flow.didRequest(openedSystemSettings: false)
+        flow.didRequest()
         flow.captureWasRefused()
         #expect(flow.step == .needsRestart)
-        flow.didRequest(openedSystemSettings: false) // 「去授权」 again does not bring the quiet hint back
+        flow.didRequest() // 「去授权」 again does not bring the quiet hint back
+        #expect(flow.step == .needsRestart)
+        flow.didOpenSystemSettings() // neither does the settings button
         #expect(flow.step == .needsRestart)
     }
 }

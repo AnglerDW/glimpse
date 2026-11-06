@@ -42,6 +42,7 @@ final class OnboardingWindowController {
         if isNew {
             let view = OnboardingView(shortcut: settings.screenshotHotkey)
             view.onRequest = { [weak self] in self?.request() }
+            view.onOpenSystemSettings = { [weak self] in self?.openSystemSettings() }
             view.onRestart = { [weak self] in self?.restart() }
             view.onClose = { [weak self] in self?.close() }
             view.onLaunchAtLoginChange = { [weak self] enabled in
@@ -90,7 +91,15 @@ final class OnboardingWindowController {
 
     private func request() {
         applyLoginItemRecommendation()
-        flow.didRequest(openedSystemSettings: PermissionService.request())
+        PermissionService.request()
+        flow.didRequest()
+        render()
+    }
+
+    /// 「打开系统设置…」: for when the system's prompt does not appear (it shows once per app identity).
+    private func openSystemSettings() {
+        flow.didOpenSystemSettings()
+        PermissionService.openSystemSettings()
         render()
     }
 
@@ -218,6 +227,7 @@ private final class OnboardingWindow: NSWindow {
 /// interface accent (design doc §3.9) and follow it when it changes.
 private final class OnboardingView: NSView {
     var onRequest: (() -> Void)?
+    var onOpenSystemSettings: (() -> Void)?
     var onRestart: (() -> Void)?
     var onClose: (() -> Void)?
     var onLaunchAtLoginChange: ((Bool) -> Void)?
@@ -229,6 +239,10 @@ private final class OnboardingView: NSView {
 
     private let stack = NSStackView()
     private let request = NSButton(title: String(localized: "去授权", comment: "Onboarding: primary button"), target: nil, action: nil)
+    /// Beside 「去授权」, small: the system's prompt shows once per app identity, so a user who dismissed it
+    /// (or whom it never reached) needs a way to the switch that does not depend on it.
+    private let openSettings = NSButton(title: String(localized: "打开系统设置…", comment: "Onboarding: secondary button, opens System Settings → Screen Recording"), target: nil, action: nil)
+    private let requestRow = NSStackView()
     private let restartRow = NSStackView()
     private let restartHint = NSTextField(wrappingLabelWithString: "")
     private let restart = NSButton(title: String(localized: "重新启动 Glimpse", comment: "Onboarding: restart button"), target: nil, action: nil)
@@ -271,6 +285,15 @@ private final class OnboardingView: NSView {
         request.action = #selector(requestClicked)
         request.bezelStyle = .push
         request.keyEquivalent = "\r"
+        openSettings.target = self
+        openSettings.action = #selector(openSystemSettingsClicked)
+        openSettings.bezelStyle = .push
+        openSettings.controlSize = .small
+        requestRow.orientation = .horizontal
+        requestRow.alignment = .centerY
+        requestRow.spacing = 10
+        requestRow.addArrangedSubview(request)
+        requestRow.addArrangedSubview(openSettings)
 
         restartHint.preferredMaxLayoutWidth = textWidth - 150
         restart.target = self
@@ -315,7 +338,7 @@ private final class OnboardingView: NSView {
         stack.alignment = .leading
         stack.spacing = 12
         stack.edgeInsets = NSEdgeInsets(top: Self.inset, left: Self.inset, bottom: Self.inset, right: Self.inset)
-        for view in [icon, title, body, promptNote, request, restartRow, hint, launchAtLogin, loginItemRow] as [NSView] {
+        for view in [icon, title, body, promptNote, requestRow, restartRow, hint, launchAtLogin, loginItemRow] as [NSView] {
             stack.addArrangedSubview(view)
         }
         stack.setCustomSpacing(4, after: launchAtLogin)
@@ -424,6 +447,7 @@ private final class OnboardingView: NSView {
     }
 
     @objc private func requestClicked() { onRequest?() }
+    @objc private func openSystemSettingsClicked() { onOpenSystemSettings?() }
     @objc private func restartClicked() { onRestart?() }
     @objc private func closeClicked() { onClose?() }
     @objc private func openLoginItemsClicked() { onOpenLoginItems?() }

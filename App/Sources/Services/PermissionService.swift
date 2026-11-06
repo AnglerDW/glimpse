@@ -4,8 +4,6 @@ import ScreenCaptureKit
 /// Screen Recording permission (design doc §3.8, §5.1): check it, ask for it, and restart Glimpse,
 /// which macOS often needs before a fresh grant takes effect.
 enum PermissionService {
-    private static let didRequestKey = "didRequestScreenRecording"
-
     /// Why the onboarding window opens.
     enum Problem {
         /// The preflight says the permission is missing (never granted, or revoked).
@@ -20,18 +18,15 @@ enum PermissionService {
     /// refuses, cleared by the next capture that works; the menu bar icon keeps its mark meanwhile.
     @MainActor static var captureRefused = false
 
-    /// 「去授权」: asks the system first, which puts Glimpse in the Screen Recording list (an app that never
-    /// asked is missing there, and the user would have to add it with 「+」). The very first time the system
-    /// shows its own prompt, which has its own 「打开系统设置」 button, so System Settings is opened only from the
-    /// second time on: the prompt and the Settings window never stack. Returns whether System Settings was opened.
-    @discardableResult
-    static func request() -> Bool {
-        let defaults = UserDefaults.standard
-        let requestedBefore = defaults.bool(forKey: didRequestKey)
-        defaults.set(true, forKey: didRequestKey)
+    /// 「去授权」: asks the system, which puts Glimpse in the Screen Recording list (an app that never asked
+    /// is missing there, and the user would have to add it with 「+」). The first time for this app identity
+    /// the system shows its own prompt, which has its own 「打开系统设置」 button; after that nothing visible
+    /// happens, which is why the window offers 「打开系统设置…」 as well. Nothing is remembered here: a
+    /// "did we ask before" flag cannot tell whether the system will prompt again (it prompts once per code
+    /// signature, so every rebuild of an ad-hoc signed app starts over), and guessing wrong stacked the
+    /// prompt and System Settings on top of each other (device feedback).
+    static func request() {
         _ = CGRequestScreenCaptureAccess()
-        if requestedBefore { openSystemSettings() }
-        return requestedBefore
     }
 
     static func openSystemSettings() {

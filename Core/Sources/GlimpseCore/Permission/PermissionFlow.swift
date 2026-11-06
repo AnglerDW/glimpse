@@ -4,8 +4,9 @@ public struct PermissionFlow: Equatable, Sendable {
     public enum Step: Equatable, Sendable {
         /// Show 「去授权」.
         case needsGrant
-        /// 「去授权」 only brought up the system's own prompt (its 「打开系统设置」 button may have opened System
-        /// Settings without us knowing): show 「去授权」 plus a quiet hint with a secondary restart button.
+        /// 「去授权」 was clicked (the system's prompt may have appeared, and its 「打开系统设置」 button may have
+        /// opened System Settings without us knowing): show 「去授权」 plus a quiet hint with a secondary restart
+        /// button.
         case restartHint
         /// Show 「去授权」 and 「重新启动 Glimpse」.
         case needsRestart
@@ -23,14 +24,16 @@ public struct PermissionFlow: Equatable, Sendable {
 
     public init() {}
 
-    /// 「去授权」 clicked. `openedSystemSettings` is false the very first time, when only the system's own
-    /// prompt appears (see PermissionService.request).
-    public mutating func didRequest(openedSystemSettings opened: Bool) {
-        if opened {
-            openedSystemSettings = true
-        } else if step == .needsGrant {
-            step = .restartHint
-        }
+    /// 「去授权」 clicked: only the system's own prompt can appear (see PermissionService.request), and the
+    /// window cannot tell whether it did or what the user chose in it.
+    public mutating func didRequest() {
+        if step == .needsGrant { step = .restartHint }
+    }
+
+    /// 「打开系统设置…」 clicked: from now on, coming back without the grant means it needs a restart.
+    public mutating func didOpenSystemSettings() {
+        openedSystemSettings = true
+        if step == .needsGrant { step = .restartHint }
     }
 
     /// A capture was refused while the preflight says granted: offer the restart at once.
