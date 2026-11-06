@@ -57,8 +57,7 @@ final class ToolbarButton: NSButton {
         imagePosition = .imageOnly
         imageScaling = .scaleNone
         (cell as? NSButtonCell)?.imageDimsWhenDisabled = false // disabled look comes from alphaValue alone
-        image = NSImage(systemSymbolName: item.symbolName, accessibilityDescription: item.title)?
-            .withSymbolConfiguration(Self.symbolConfiguration)
+        image = Self.image(for: item)
         if image == nil { title = item.title } // unknown symbol name: still a usable button
         setAccessibilityLabel(item.toolTip)
         refusesFirstResponder = true
@@ -75,6 +74,33 @@ final class ToolbarButton: NSButton {
         refreshColors()
         accentObservation = AccentObservation { [weak self] in self?.refreshColors() }
     }
+
+    /// The button's glyph: an SF Symbol, except the text tool, which is a plain "A" drawn from the
+    /// system font. The `character` / `textformat` symbols are localised by the system (字 on a
+    /// Chinese system, あ on Japanese), and the text tool must read as the same "A" everywhere
+    /// (user feedback).
+    private static func image(for item: ToolbarItem) -> NSImage? {
+        if case .tool(.text) = item { return letterA }
+        return NSImage(systemSymbolName: item.symbolName, accessibilityDescription: item.title)?
+            .withSymbolConfiguration(symbolConfiguration)
+    }
+
+    /// "A" at the symbols' size, as a template image so it takes the same colour as the symbols.
+    private static let letterA: NSImage = {
+        let side: CGFloat = 18
+        let image = NSImage(size: CGSize(width: side, height: side), flipped: false) { rect in
+            let font = NSFont.systemFont(ofSize: 14.5, weight: .medium)
+            let glyph = NSAttributedString(string: "A", attributes: [.font: font, .foregroundColor: NSColor.black])
+            let size = glyph.size()
+            // Optical centre: cap height sits above the baseline, so centre the cap, not the line box.
+            let y = (rect.height - font.capHeight) / 2 - font.descender - (font.ascender - font.capHeight)
+            glyph.draw(at: CGPoint(x: (rect.width - size.width) / 2, y: y))
+            return true
+        }
+        image.isTemplate = true
+        image.accessibilityDescription = String(localized: "文字", comment: "Toolbar: tool name")
+        return image
+    }()
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { fatalError("init(coder:) is not used") }
