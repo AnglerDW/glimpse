@@ -22,7 +22,7 @@ enum ToolbarItem: Hashable {
         case .tool(.ellipse): "circle"
         case .tool(.arrow): "arrow.up.right"
         case .tool(.pen): "pencil"
-        case .tool(.text): "textformat"
+        case .tool(.text): "character"
         case .tool(.mosaic): "checkerboard.rectangle"
         case .tool(.counter): "1.circle"
         case .undo: "arrow.uturn.backward"
